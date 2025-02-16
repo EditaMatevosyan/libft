@@ -1,42 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memmove.c                                       :+:      :+:    :+:   */
+/*   ft_lstmap.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: edmatevo <edmatevo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/24 14:51:45 by edmatevo          #+#    #+#             */
-/*   Updated: 2025/02/05 18:18:55 by edmatevo         ###   ########.fr       */
+/*   Created: 2025/02/15 14:34:03 by edmatevo          #+#    #+#             */
+/*   Updated: 2025/02/16 18:56:11 by edmatevo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	*ft_memmove(void *dst, const void *src, size_t len)
+t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 {
-	unsigned char	*ptr1;
-	unsigned char	*ptr2;
-	size_t			i;
+	t_list	*new_lst;
+	t_list	*node;
+	t_list	*val;
 
-	ptr1 = (unsigned char *)dst;
-	ptr2 = (unsigned char *)src;
-	if (!dst && !src)
+	if (!lst || !f || !del)
 		return (NULL);
-	if (dst <= src)
+	new_lst = NULL;
+	while (lst != NULL)
 	{
-		i = 0;
-		while (i < len)
+		val = f(lst->content);
+		node = ft_lstnew(val);
+		if (!node)
 		{
-			ptr1[i] = ptr2[i];
-			i++;
+			del(val);
+			ft_lstclear(&node, (*del));
+			return (new_lst);
 		}
+		ft_lstadd_back(&new_lst, node);
+		lst = lst->next;
 	}
-	else
-	{
-		ptr1 = ptr1 + len - 1;
-		ptr2 = ptr2 + len - 1;
-		while (len--)
-			*ptr1-- = *ptr2--;
-	}
-	return (dst);
+	return (new_lst);
 }
