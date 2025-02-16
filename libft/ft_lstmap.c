@@ -1,34 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstmap.c                                        :+:      :+:    :+:   */
+/*   ft_memmove.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: edmatevo <edmatevo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/15 14:34:03 by edmatevo          #+#    #+#             */
-/*   Updated: 2025/02/15 16:44:55 by edmatevo         ###   ########.fr       */
+/*   Created: 2025/01/24 14:51:45 by edmatevo          #+#    #+#             */
+/*   Updated: 2025/02/05 18:18:55 by edmatevo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-t_list *ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
+void	*ft_memmove(void *dst, const void *src, size_t len)
 {
-    t_list *new_lst;
-    t_list *node;
-    
-    if(!lst || !f || !del)
-        return (NULL);
-    while (lst)
-    {
-        node = ft_lstnew(f(lst->content));
-        if (!node)
-        {
-            ft_lstclear(&node, (*del));
-            return (NULL);
-        }
-        ft_lstadd_back(&new_lst, node);
-        lst = lst->next;
-    }
-    return (new_lst);
+	unsigned char	*ptr1;
+	unsigned char	*ptr2;
+	size_t			i;
+
+	ptr1 = (unsigned char *)dst;
+	ptr2 = (unsigned char *)src;
+	if (!dst && !src)
+		return (NULL);
+	if (dst <= src)
+	{
+		i = 0;
+		while (i < len)
+		{
+			ptr1[i] = ptr2[i];
+			i++;
+		}
+	}
+	else
+	{
+		ptr1 = ptr1 + len - 1;
+		ptr2 = ptr2 + len - 1;
+		while (len--)
+			*ptr1-- = *ptr2--;
+	}
+	return (dst);
 }
